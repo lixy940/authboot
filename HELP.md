@@ -88,4 +88,7 @@ mconfig.swagger-ui-open=true
                     info.addStringPermission(permission);
                 }
             }
-        }    
+        }
+        
+        
+### 参考 https://gitee.com/ssh123/shiro 码运的shiro使用             
