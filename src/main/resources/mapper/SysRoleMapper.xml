@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lixy.mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.lixy.entity.SysRole">
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_key" jdbcType="VARCHAR" property="roleKey" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="data_scope" jdbcType="TINYINT" property="dataScope" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="del_flag" jdbcType="TINYINT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, role_name, role_key, sort, data_scope, status, del_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+    <select id="listRolesByUserId" parameterType="Long" resultMap="BaseResultMap">
+	  SELECT
+      	    r.role_id,
+			r.role_name
+	   FROM
+			sys_role r
+	   LEFT JOIN sys_user_role ur ON ur.role_id = r.role_id
+	   WHERE
+			ur.user_id = #{id}
+	   AND r.status = 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lixy.entity.SysRole">
+    insert into sys_role (role_id, role_name, role_key, 
+      sort, data_scope, status, 
+      del_flag)
+    values (#{roleId,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{roleKey,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=INTEGER}, #{dataScope,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{delFlag,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lixy.entity.SysRole">
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="roleKey != null">
+        role_key,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="dataScope != null">
+        data_scope,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleKey != null">
+        #{roleKey,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="dataScope != null">
+        #{dataScope,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lixy.entity.SysRole">
+    update sys_role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleKey != null">
+        role_key = #{roleKey,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="dataScope != null">
+        data_scope = #{dataScope,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lixy.entity.SysRole">
+    update sys_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_key = #{roleKey,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      data_scope = #{dataScope,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      del_flag = #{delFlag,jdbcType=TINYINT}
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lixy.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.lixy.entity.SysMenu">
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="platform_type" jdbcType="TINYINT" property="platformType" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="target" jdbcType="TINYINT" property="target" />
+    <result column="menu_type" jdbcType="VARCHAR" property="menuType" />
+    <result column="visible" jdbcType="TINYINT" property="visible" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    menu_id, menu_name, parent_id, platform_type, sort, url, target, menu_type, visible, 
+    perms, icon
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+    <select id="listUrlAndPermission"  resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+            sys_menu
+        WHERE
+            url IS NOT NULL
+        ORDER BY
+            sort ASC
+    </select>
+  <select id="listByUserId"  parameterType="Long" resultMap="BaseResultMap">
+	  SELECT
+            re.menu_id,
+            re.menu_name,
+            re.parent_id,
+            re.url,
+            re.perms,
+            re.icon,
+            re.sort
+        FROM
+        sys_menu re
+        INNER JOIN sys_role_menu rr ON re.menu_id = rr.menu_id
+        INNER JOIN sys_user_role ur ON rr.role_id = ur.role_id
+        WHERE
+            ur.user_id = #{id}
+        AND re.visible = 1
+        ORDER BY
+            re.parent_id ASC,
+            re.sort ASC
+	</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lixy.entity.SysMenu">
+    insert into sys_menu (menu_id, menu_name, parent_id, 
+      platform_type, sort, url, 
+      target, menu_type, visible, 
+      perms, icon)
+    values (#{menuId,jdbcType=BIGINT}, #{menuName}, #{parentId,jdbcType=BIGINT},
+      #{platformType,jdbcType=TINYINT}, #{sort,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{target,jdbcType=TINYINT}, #{menuType,jdbcType=VARCHAR}, #{visible,jdbcType=TINYINT}, 
+      #{perms,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lixy.entity.SysMenu">
+    insert into sys_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        menu_id,
+      </if>
+      <if test="menuName != null">
+        menu_name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="platformType != null">
+        platform_type,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="target != null">
+        target,
+      </if>
+      <if test="menuType != null">
+        menu_type,
+      </if>
+      <if test="visible != null">
+        visible,
+      </if>
+      <if test="perms != null">
+        perms,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="menuName != null">
+        #{menuName},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="platformType != null">
+        #{platformType,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        #{target,jdbcType=TINYINT},
+      </if>
+      <if test="menuType != null">
+        #{menuType,jdbcType=VARCHAR},
+      </if>
+      <if test="visible != null">
+        #{visible,jdbcType=TINYINT},
+      </if>
+      <if test="perms != null">
+        #{perms,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lixy.entity.SysMenu">
+    update sys_menu
+    <set>
+      <if test="menuName != null">
+        menu_name = #{menuName},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="platformType != null">
+        platform_type = #{platformType,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        target = #{target,jdbcType=TINYINT},
+      </if>
+      <if test="menuType != null">
+        menu_type = #{menuType,jdbcType=VARCHAR},
+      </if>
+      <if test="visible != null">
+        visible = #{visible,jdbcType=TINYINT},
+      </if>
+      <if test="perms != null">
+        perms = #{perms,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lixy.entity.SysMenu">
+    update sys_menu
+    set menu_name = #{menuName},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      platform_type = #{platformType,jdbcType=TINYINT},
+      sort = #{sort,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      target = #{target,jdbcType=TINYINT},
+      menu_type = #{menuType,jdbcType=VARCHAR},
+      visible = #{visible,jdbcType=TINYINT},
+      perms = #{perms,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR}
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+</mapper>
