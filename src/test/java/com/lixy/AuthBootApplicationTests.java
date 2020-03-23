@@ -8,6 +8,7 @@ class AuthBootApplicationTests {
 
     @Test
     void contextLoads() {
+		
     }
 
 }
